@@ -1,14 +1,18 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { GlobalContext } from "../../GlobalProvider";
 import Footer from "../Sheet/Footer";
 import Header from "../Headers/Header";
 import ImportExcel from "../Sheet/ImportExcel";
+import { BsArrowDownCircleFill } from "react-icons/bs";
+import Bufferingwindow from "../Sheet/Bufferingwindow";
 import { pickBy, keys, max, isEmpty } from "lodash";
 import "../../App.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import axios from "axios";
 import Sidebar from "../SideBar/Sidebar";
 import Weatherapi from "./Weatherapi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Datasource = () => {
   const dragItem = useRef();
   const {
@@ -17,7 +21,6 @@ const Datasource = () => {
     setSelectedWB,
     setSelectedWBSheet,
     dbname,
-    setdbNames,
     serverDetails,
     sheets,
     dbTableNames,
@@ -25,9 +28,11 @@ const Datasource = () => {
     setdbTableNames,
     databaseNames,
     setdatabaseName,
-    queryW,
-    setQueryW,
+    loading,
+    setLoading,
+    setBufferingModal,
   } = useContext(GlobalContext);
+  const [value, setValue] = useState(50);
   const [sheet1, setSheet1] = useState();
   const [sheet2, setSheet2] = useState();
   const [interSection, setInterSection] = useState();
@@ -180,7 +185,23 @@ const Datasource = () => {
         console.log(res);
       });
   };
+  const notify = () => toast("No More Rows");
 
+  function handleSeeMore() {
+    if (selectedWB[selectedWBSheet].length < value) {
+      notify();
+    } else {
+      setValue(value + 100);
+      setLoading(true);
+    }
+  }
+  useEffect(() => {
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  }, [loading]);
   return (
     <>
       <Header />
@@ -191,6 +212,7 @@ const Datasource = () => {
           <p>Sheets</p>
           <hr></hr>
           <ImportExcel />
+          <ToastContainer />
           <hr />
           <select
             id="schema"
@@ -323,17 +345,28 @@ const Datasource = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedWB[selectedWBSheet].slice(1).map((row, index) => (
-                      <tr key={index} className="Keys">
-                        {row.map((c, idx) => (
-                          <td className="Keys" key={idx}>
-                            {c}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
+                    {loading ? (
+                      <Bufferingwindow />
+                    ) : (
+                      selectedWB[selectedWBSheet]
+                        .slice(1, value)
+                        .map((row, index) => (
+                          <tr key={index} className="Keys">
+                            {row.map((c, idx) => (
+                              <td className="Keys" key={idx}>
+                                {c}
+                              </td>
+                            ))}
+                          </tr>
+                        ))
+                    )}
                   </tbody>
                 </table>
+                <button onClick={handleSeeMore} style={{ width: "auto" }}>
+                  See more
+                  {/* <FaRegUserCircle /> */}
+                  <BsArrowDownCircleFill />
+                </button>
               </div>
             )}
           </Scrollbars>

@@ -214,7 +214,7 @@ const Weatherapi = () => {
               placeholder="longitude"
             />
             <button
-              style={{ float: "right" }}
+              style={{ float: "right", width: "auto" }}
               className="HeaderBtn"
               onClick={fetchData}
             >
@@ -230,7 +230,7 @@ const Weatherapi = () => {
               placeholder="City Name"
             />
             <button
-              style={{ float: "right" }}
+              style={{ float: "right", width: "auto" }}
               className="HeaderBtn"
               onClick={fetchDataforSingleCity}
             >

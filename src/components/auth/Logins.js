@@ -1,16 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../../GlobalProvider";
-import { loginUser } from "../actions/authActions";
 import { useNavigate, Navigate, Link } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import {
-  setAuthenticated,
-  SET_CURRENT_USER,
-  USER_LOADING,
-} from "../actions/types";
-import Sheet from "../Sheet/Sheet";
 import axios from "axios";
-
+/*
+Login page rendered on the home page
+*/
 const Login = (props) => {
   const {
     form,
@@ -22,7 +16,10 @@ const Login = (props) => {
     setError,
   } = useContext(GlobalContext);
   let navigate = useNavigate();
-
+  const [rememberMe, setRememberMe] = useState(false);
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+  };
   const handleChange = (e) => {
     const { id, value } = e.target;
     setLUser({
@@ -49,7 +46,7 @@ const Login = (props) => {
           "https://ocean-user-serverbackend.onrender.com/api/users/login",
           userData
         )
-        // .post("http://18.117.87.102:5001/api/users/login", userData)
+        // .post("http://localhost:5001/api/users/login", userData)
 
         .then((res) => {
           const { token } = res.data;
@@ -64,22 +61,27 @@ const Login = (props) => {
   return (
     <>
       <div className="LoginPage">
+        <div className="">
+          <h4
+            style={{
+              marginLeft: "-165px",
+              fontWeight: "500",
+            }}
+          >
+            Login
+          </h4>
+        </div>
         <p
           style={{
             width: "10%",
-            height: "3px",
-            marginLeft: "-490px",
-            marginBottom: "20px",
-            border: "1px solid black",
-            backgroundColor: "black",
+            height: "3.25px",
+            marginLeft: "-285px",
+            marginTop: "5px",
+            border: "1px solid #E50035",
+            backgroundColor: "#E50035",
           }}
         ></p>
 
-        <div className="">
-          <h4 style={{ marginLeft: "-280px" }}>
-            <b>Login</b> below
-          </h4>
-        </div>
         <form className="LoginForm" onSubmit={handleSubmit}>
           <input
             className="formInput"
@@ -99,7 +101,7 @@ const Login = (props) => {
             type="password"
             placeholder="Password"
           />
-          <br></br>
+
           <p style={{ color: "red" }}>
             {error && (
               <>
@@ -107,26 +109,72 @@ const Login = (props) => {
               </>
             )}
           </p>
-          <div style={{ display: "flex", cursor: "pointer" }}>
-            <p className="text_tag">
-              Don't have an account?<br></br>
-              <button
-                value="register"
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: "#5d6d7e",
-                  border: "3px solid black",
-                  borderRadius: "8px",
-                  fontSize: "10px",
-                  padding: "3px",
-                  width: "auto",
-                }}
-                onClick={(e) => setForm(e.target.value)}
-              >
-                Register
-              </button>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "10px",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* <label style={{ fontSize: "13px" }}>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={handleRememberMe}
+              />
+            </label> */}
+            <p
+              className="text_tag"
+              onClick={(e) => setForm("forgotPassword")}
+              style={{
+                cursor: "pointer",
+                backgroundColor: "#ffff",
+                color: "#1A73E8",
+                borderRadius: "8px",
+                fontSize: "12px",
+                padding: "3px",
+                width: "200px",
+                height: "30px",
+                marginTop: "10px",
+                marginLeft: "-0px",
+              }}
+            >
+              Forgot Password?<br></br>
             </p>
-            <button className="formBtn">Submit</button>
+            <button
+              className="formBtn"
+              style={{
+                width: "120px",
+                height: "40px",
+                backgroundColor: "#1A73E8",
+                color: "white",
+                fontWeight: "400",
+              }}
+            >
+              Login
+            </button>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <button
+              value="register"
+              style={{
+                cursor: "pointer",
+                backgroundColor: "#ffff",
+                color: "#1A73E8",
+                border: "1px solid #1A73E8",
+                borderRadius: "8px",
+                fontSize: "12px",
+                padding: "3px",
+                width: "250px",
+                height: "30px",
+                marginTop: "25px",
+                marginLeft: "40px",
+              }}
+              onClick={(e) => setForm(e.target.value)}
+            >
+              Create new account
+            </button>
           </div>
         </form>
       </div>

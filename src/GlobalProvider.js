@@ -29,6 +29,8 @@ export const GlobalProvider = ({ children }) => {
   const [container, setContainer] = useState(initialContainer);
   const [selectedStory, setSelectedStory] = useState();
   const [selectedSheet, setSelectedSheet] = useState();
+  const [selectedDashboard, setSelectedDashboard] = useState();
+
   const [columns, setColumns] = useState([]);
   const [selectedWB, setSelectedWB] = useState();
   const [selectedWBSheet, setSelectedWBSheet] = useState();
@@ -48,7 +50,12 @@ export const GlobalProvider = ({ children }) => {
   const [operator1, setOperator1] = useState();
   const [showMenu, setShowMenu] = useState(false);
   let [nullCount, setNullCount] = useState(0);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
   const [disableComponenet, setDisableComponent] = useState();
   const [us, setUs] = useState([{}]);
   const [Uname, setUname] = useState();
@@ -82,10 +89,21 @@ export const GlobalProvider = ({ children }) => {
   const [lonforWeather, setLonforWeather] = useState();
   const [modalforWeather, setModalforWeather] = useState();
   const [serchwithCity, setSearchwithCity] = useState();
+  const [openRenameModal, setRenameModal] = useState(false);
+  const [pathlocation, setPathLocation] = useState();
+  const [registerOTP, setRegisterOTP] = useState();
 
   return (
     <GlobalContext.Provider
       value={{
+        registerOTP,
+        setRegisterOTP,
+        pathlocation,
+        setPathLocation,
+        selectedDashboard,
+        setSelectedDashboard,
+        openRenameModal,
+        setRenameModal,
         serchwithCity,
         setSearchwithCity,
         latforWeather,

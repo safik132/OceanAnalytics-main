@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { GlobalContext } from "../../GlobalProvider";
-import { postFormData } from "./axiosHandle";
 import Modal from "react-modal";
 import axios from "axios";
 const MLForm = () => {

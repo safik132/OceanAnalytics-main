@@ -1,19 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { GlobalContext } from "../../GlobalProvider";
-import { Link, withRouter } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { registerUser } from "../actions/authActions";
-import classnames from "classnames";
-
+import { Link, withRouter, useNavigate } from "react-router-dom";
+import axios from "axios";
+import emailjs from "@emailjs/browser";
+/* to register user */
 const Register = (userData) => {
-  const { form, setForm, error, setError } = useContext(GlobalContext);
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
-  });
+  const navigate = useNavigate();
+
+  const {
+    setForm,
+    error,
+    setError,
+    setRegisterOTP,
+    user,
+    setUser,
+  } = useContext(GlobalContext);
+  // const [user, setUser] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   password2: "",
+  // });
+  const email = useRef();
+  let randOtp = "";
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -30,38 +39,78 @@ const Register = (userData) => {
       email: user.email,
       password: user.password,
       password2: user.password2,
-      Role: user.Role,
+      // Role:user.Role,
+      Role: "premium", //disabled user for test case do not remove this
     };
-    registerUser(newUser);
-    if (alert) {
-      setUser({
-        name: "",
-        email: "",
-        password: "",
-        password2: "",
-        Role: "",
-      });
+
+    setUser(newUser);
+    var x = document.getElementById("verifyOTP");
+    const len = 5;
+    for (let i = 0; i < len; i++) {
+      const ch = Math.floor(Math.random() * 10 + 1);
+      randOtp += ch;
     }
+    console.log(randOtp);
+    setRegisterOTP(randOtp);
+    axios
+      // .post("http://localhost:5001/api/users/checkemail", user)
+      .post(
+        "https://ocean-user-serverbackend.onrender.com/api/users/checkemail",
+        user
+      )
+      .then((res) => {
+        if (res.data.email === "new user") {
+          if (newUser.password === newUser.password2) {
+            emailjs
+              .send(
+                "service_d47neib",
+                "template_0hhy8lm",
+                {
+                  email: newUser.email,
+                  code: randOtp,
+                },
+                "cDFiq8UMCJuSB535H"
+              )
+              .then(
+                (result) => {
+                  navigate("/Otp");
+                  setError("");
+                },
+                (error) => {
+                  console.log(error.text);
+                }
+              );
+          } else {
+            setError("Passwords didn't match");
+          }
+        } else {
+          setError(res.data.email);
+        }
+      });
   };
-  // const { errors } = user.errors;
   return (
     <>
       <div className="LoginPage">
+        <div className="">
+          <h4
+            style={{
+              marginLeft: "-165px",
+              fontWeight: "500",
+            }}
+          >
+            Register
+          </h4>
+        </div>
         <p
           style={{
             width: "10%",
-            height: "3px",
-            marginLeft: "-490px",
-            marginBottom: "20px",
-            border: "1px solid black",
-            backgroundColor: "black",
+            height: "3.25px",
+            marginLeft: "-285px",
+            marginTop: "5px",
+            border: "1px solid #E50035",
+            backgroundColor: "#E50035",
           }}
         ></p>
-        <div className="" style={{ paddingLeft: "11.250px" }}>
-          <h4 style={{ marginLeft: "-290px" }}>
-            <b>Register</b> Below
-          </h4>
-        </div>
         <form className="LoginForm" onSubmit={handleSubmit}>
           <input
             className="formInput"
@@ -106,7 +155,12 @@ const Register = (userData) => {
           <br></br>
           <select
             className="formInput"
-            style={{ fontSize: "15px", padding: "0px" }}
+            style={{
+              fontSize: "15px",
+              padding: "8px 0 8px 0 ",
+              height: "38px",
+              display: "none",
+            }}
             onChange={handleChange}
             id="Role"
           >
@@ -120,29 +174,39 @@ const Register = (userData) => {
           <p>
             {error && (
               <>
-                <small>{error}</small>
+                <small style={{ color: "red" }}>{error}</small>
               </>
             )}
           </p>
-          <div style={{ display: "flex", cursor: "pointer" }}>
-            <p className="text_tag">
-              Already have an account? <br></br>
-              <button
-                value="login"
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: "#5d6d7e",
-                  border: "3px solid black",
-                  borderRadius: "3px",
-                  fontSize: "10px",
-                  padding: "3px",
-                }}
-                onClick={(e) => setForm(e.target.value)}
+          <div
+            style={{
+              display: "flex",
+              cursor: "pointer",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <p style={{ width: "auto", fontSize: "13px" }}>
+              Already have a account?<br></br>
+              <p
+                style={{ fontSize: "13px", color: "#1A73E8" }}
+                onClick={() => setForm("login")}
               >
-                login
-              </button>
+                Login
+              </p>
             </p>
-            <button className="formBtn">Submit</button>
+            <button
+              className="formBtn"
+              style={{
+                width: "120px",
+                height: "40px",
+                backgroundColor: "#1A73E8",
+                color: "white",
+                fontWeight: "400",
+              }}
+            >
+              Submit
+            </button>
           </div>
         </form>
       </div>

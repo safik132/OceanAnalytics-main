@@ -288,15 +288,21 @@ const ImportExcel = (props) => {
   return (
     <Row>
       <Col>
-      <input
-      type="file"
-      accept="xlsx,xls,csv"
-      onChange={(e) => handleUploadFile(e)}
-      style={{ display: "block"}}
-      
-    />
+        {/* <input
+          type="file"
+          accept="xlsx,xls,csv"
+          onChange={(e) => handleUploadFile(e)}
+          style={{ display: "block" }}
+        /> */}
+        <label class="custom-file-upload">
+          <input
+            type="file"
+            accept="xlsx,xls,csv"
+            onChange={(e) => handleUploadFile(e)}
+          />
+          Import Data
+        </label>
 
-  
         <div
           className="fileName"
           style={{ display: "block", cursor: "pointer" }}

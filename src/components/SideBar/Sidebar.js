@@ -14,25 +14,21 @@ import {
   // GiOpenBook,
   // TbDeviceAnalytics,
   FaBars,
-  FaTh,
-  FaHome,
-  TbSettings,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import Datasource from "../DataSource/Datasource";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
-      path: "/home",
+      path: "/",
       name: "Home",
       icon: <img src={Home} className={"sidebar-icon"} />,
       // <FaHome className={"sidebar-icon"}/>
     },
     {
-      path: "/Sheet/Sheet",
+      path: "/Sheet/sheet",
       name: "Sheet",
       icon: <img src={Sheet} className={"sidebar-icon"} />,
       // icon:<FontAwesomeIcon icon={faTable} className={"sidebar-icon"} />
@@ -69,7 +65,11 @@ const Sidebar = ({ children }) => {
   return (
     <div className="container">
       <div
-        style={{ width: isOpen ? "200px" : "50px", zIndex: isOpen ? 1000 : 0 }}
+        style={{
+          width: isOpen ? "200px" : "50px",
+          zIndex: isOpen ? 1000 : 0,
+          marginBottom: "700px",
+        }}
         className="sidebar"
       >
         <div className="top_section">
@@ -81,7 +81,10 @@ const Sidebar = ({ children }) => {
             className="logo"
             alt="Aceslogo"
           />
-          <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
+          <div
+            style={{ marginLeft: isOpen ? "50px" : "0px", background: "black" }}
+            className="bars"
+          >
             <FaBars onClick={toggle} />
           </div>
         </div>
@@ -94,7 +97,9 @@ const Sidebar = ({ children }) => {
           >
             <div className="icon">{item.icon}</div>
             <div
-              style={{ display: isOpen ? "block" : "none" }}
+              style={{
+                display: isOpen ? "block" : "none",
+              }}
               className="link_text"
             >
               {item.name}

@@ -8,6 +8,7 @@ import { pickBy, keys, max, isEmpty } from "lodash";
 import StoryPlot from "./StoryPlot";
 import { useEffect } from "react";
 import Sidebar from "../SideBar/Sidebar";
+import Menu from "../../Menu";
 //Second commit
 const Story = () => {
   const dragItem = useRef();
@@ -51,6 +52,7 @@ const Story = () => {
     <>
       <Header />
       <Sidebar />
+      <Menu />
       <div className="storyPage">
         <div className="SheetNames">
           {/* <p style={{ fontSize: "18px", padding: "8px", textAlign: "center" }}>
@@ -117,7 +119,6 @@ const Story = () => {
           <div className="StoryContainerBtn">
             <div className="story">
               <div className="StoryContainerPlot">
-
                 {selectedStory && selected && (
                   <StoryPlot
                     selectedStory={selectedStory}

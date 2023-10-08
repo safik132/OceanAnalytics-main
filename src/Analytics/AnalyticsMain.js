@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../components/Sheet/Footer";
 import Header from "../components/Headers/Header";
-import DataDisplay from "./DataDisplay/DataDisplay";
 import MLModel from "./ML/MLModel";
 import Sidebar from "../components/SideBar/Sidebar";
 import Describe from "./DataDisplay/Describe";

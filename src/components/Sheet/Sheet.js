@@ -20,7 +20,6 @@ import axios from "axios";
 import Crosstable from "./Crosstable";
 import { saveAs } from "file-saver";
 import Bufferingwindow from "./Bufferingwindow";
-import AlanTalk from "./AlanTalk";
 import Sidebar from "../SideBar/Sidebar";
 const Sheet = () => {
   const [sheetParams, setSheetParam] = useState();
@@ -35,7 +34,7 @@ const Sheet = () => {
     loading,
     dashboards,
     storys,
-    setColor,
+    pathlocation,
     setMatchUser,
     columns,
     sheets,
@@ -72,7 +71,6 @@ const Sheet = () => {
   const handleSheetChange = (event) => {
     setSelectedWBSheet(event.target.value);
   };
-
   // to get particular row/column data
   const processCsv = (jsonData) => {
     const head = jsonData[0];
@@ -288,6 +286,7 @@ const Sheet = () => {
       {/* <AlanTalk processCsv={processCsv} selectGraph={selectGraph} /> */}
 
       <div className="row-column-button">
+       
         <div
           className="row-column
         "

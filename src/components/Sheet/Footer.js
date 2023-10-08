@@ -1,19 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from "react";
-import {
-  FaCompress,
-  FaAngleRight,
-  FaForward,
-  FaTh,
-  FaPlusCircle,
-} from "react-icons/fa";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTable,
-  faBookOpen,
-  faChartLine,
-  faListCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { Link, useParams } from "react-router-dom";
+import { FaPlusCircle } from "react-icons/fa";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { GlobalContext } from "../../GlobalProvider";
 import Menu from "../../Menu";
 import AlanTalk from "./AlanTalk";
@@ -24,7 +11,11 @@ import Dash from "../../images/3.png";
 import sty from "../../images/4.png";
 import analytics from "../../images/5.png";
 const Footer = () => {
-  // const { x, y, showMenu } = useRightClickMenu();
+  // const { x, y, showMenu } = useRightClickMenu();4
+  const sheetParam = useParams().sheet;
+  const dashboardParam = useParams().dashboard;
+  const storyParam = useParams().story;
+
   const {
     sheets,
     setSheets,
@@ -37,9 +28,22 @@ const Footer = () => {
     matchedUser,
     disableComponenet,
     setDisableComponent,
+    setRenameModal,
+    selectedSheet,
+    pathlocation,
+    setPathLocation,
+    selectedDashboard,
+    selectedStory,
+    setSelectedSheet,
   } = useContext(GlobalContext);
+  const [contextMenuVisible, setContextMenuVisible] = useState(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  let location = useLocation();
+  // const [selectedSheet, setSelectedSheet] = useState(null);
   const handleAddSheet = () => {
-    console.log("handleAddSheet");
     const newSheet = { name: `sheet${sheets.length}`, workbooks: [], rows: [] };
     setSheets((prev) => [...prev, newSheet]);
   };
@@ -60,13 +64,19 @@ const Footer = () => {
     setStorys((prev) => [...prev, newStory]);
   };
 
-  const updateSheetname = (e) => {
+  const updateSheetname = (e, sheet) => {
     e.preventDefault();
-    setShowMenu(true);
+    // setSelectedSheet(sheet); // Store the selected sheet
+    setContextMenuVisible(true);
+    const x = e.clientX;
+    const y = e.clientY;
+    const contextMenuHeight = 140;
+    const topPosition = y - contextMenuHeight;
+    setContextMenuPosition({ x, y: topPosition });
   };
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    setShowMenu(true);
+
+  const handleCloseContextMenu = () => {
+    setContextMenuVisible(false);
   };
   const handleClick = () => {
     showMenu && setShowMenu(false);
@@ -86,8 +96,51 @@ const Footer = () => {
         "none";
       document.getElementById("disableFooterAnalytics").style.opacity = 0.1;
     }
+    document.addEventListener("click", handleCloseContextMenu);
   }); //
-
+  const handleRename = () => {
+    setRenameModal(true);
+  };
+  const handleDuplicate = () => {
+    if (pathlocation === "Sheet") {
+      const clone = structuredClone(selectedSheet);
+      clone.name = `${clone.name}-D`;
+      setSheets((prev) => [...prev, clone]);
+    }
+    if (pathlocation === "dashboard") {
+      const cloneDashboard = structuredClone(selectedDashboard);
+      cloneDashboard.name = `${cloneDashboard.name}-D`;
+      setDashboards((prev) => [...prev, cloneDashboard]);
+    }
+    if (pathlocation === "story") {
+      const cloneStory = structuredClone(selectedStory);
+      cloneStory.name = `${cloneStory.name}-D`;
+      setStorys((prev) => [...prev, cloneStory]);
+    }
+  };
+  const handleDelete = () => {
+    if (pathlocation === "Sheet") {
+      const tempSheets = sheets.filter((s, index) =>
+        s.name === sheetParam ? s != sheets[index] : s
+      );
+      setSheets(tempSheets);
+    }
+    if (pathlocation === "dashboard") {
+      const tempDashboards = dashboards.filter((s, index) =>
+        s.name === dashboardParam ? s != dashboards[index] : s
+      );
+      setDashboards(tempDashboards);
+    }
+    if (pathlocation === "story") {
+      const tempStorys = storys.filter((s, index) =>
+        s.name === storyParam ? s != storys[index] : s
+      );
+      setStorys(tempStorys);
+    }
+  };
+  useEffect(() => {
+    setPathLocation(location.pathname.split("/")[1]);
+  }, []);
   return (
     <>
       <hr></hr>
@@ -115,19 +168,18 @@ const Footer = () => {
         <button onClick={handleAddSheet}>
           <FaPlusCircle className="button-plus" id="disableFooterStory" />
         </button>
-        {dashboards.map(
-          (dashboard, idx) => (
-            console.log(dashboards),
-            (
-              <button key={idx} className="footer-button">
-                <Link to={`/dashboard/${dashboard.name}`}>
-                  <img src={Dash} className="icon-footer" />
-                  {dashboard.name}
-                </Link>
-              </button>
-            )
-          )
-        )}
+        {dashboards.map((dashboard, idx) => (
+          <button key={idx} className="footer-button">
+            <Link
+              to={`/dashboard/${dashboard.name}`}
+              onContextMenu={updateSheetname}
+              contextmenu="mymenu"
+            >
+              <img src={Dash} className="icon-footer" />
+              {dashboard.name}
+            </Link>
+          </button>
+        ))}
         <button onClick={handleAddDashboard} disabled={disableComponenet}>
           <FaPlusCircle className="button-plus" id="disableFooterStory" />
         </button>
@@ -136,6 +188,8 @@ const Footer = () => {
             key={idx}
             disabled={disableComponenet}
             className="footer-button"
+            onContextMenu={updateSheetname}
+            contextmenu="mymenu"
           >
             <Link to={`/story/${story.name}`} id="disableFooterStory">
               <img src={sty} className="icon-footer" />
@@ -153,7 +207,46 @@ const Footer = () => {
           </Link>
         </button>
       </div>
-
+      {contextMenuVisible && (
+        <div
+          className="context-menu"
+          style={{ top: contextMenuPosition.y, left: contextMenuPosition.x }}
+        >
+          {/* Context menu content */}
+          <div>
+            <img
+              src={"../images/Copy.png"}
+              alt="copy"
+              style={{ height: "15px", width: "15px" }}
+            />
+            Copy
+          </div>
+          <div onClick={handleDelete}>
+            <img
+              src={"../images/Paste.png"}
+              alt="paste"
+              style={{ height: "15px", width: "15px" }}
+            />
+            Delete
+          </div>
+          <div onClick={handleDuplicate}>
+            <img
+              src={"../images/Duplicate.png"}
+              alt="Duplicate"
+              style={{ height: "15px", width: "15px" }}
+            />
+            Duplicate
+          </div>
+          <div onClick={handleRename}>
+            <img
+              src={"../images/Rename.png"}
+              alt="Rename"
+              style={{ height: "15px", width: "15px" }}
+            />
+            Rename
+          </div>
+        </div>
+      )}
       <hr></hr>
     </>
   );

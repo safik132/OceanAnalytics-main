@@ -6,28 +6,7 @@ import MultipleRegression from "./MultipleRegression";
 import MLForm from "./MLForm";
 
 const MLModel = () => {
-  const [xArr, setxArr] = useState([]);
-  const [yArr, setyArr] = useState([]);
-  const [x1Arr, setx1Arr] = useState([]);
-  const [cop, setCop] = useState([]);
-  const [cop1, setCop1] = useState([]);
-
-  const [predictValue, setPredictValue] = useState([]);
-  const [rege, setRege] = useState([]);
-
-  const {
-    selectedWB,
-    selectedWBSheet,
-    selectedSheet,
-    numberofColumns,
-    numberofRows,
-    setNumberofColumns,
-    setNumberofRows,
-    setSelectedWB,
-    columns,
-    setColumns,
-    dataFormat,
-  } = useContext(GlobalContext);
+  const { dataFormat } = useContext(GlobalContext);
   const [display, setDisplay] = useState();
 
   return (
