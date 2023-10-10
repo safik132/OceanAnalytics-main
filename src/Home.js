@@ -21,7 +21,7 @@ const Home = () => {
       <div className="home-page">
         <div className="leftSide">
           <a href="https://www.aces-co.com/" rel="noreferrer" target="_blank">
-            <img className="logo" src={Acealyze} alt="logo-img" />
+            <img className="logo_logo" src={Acealyze} alt="logo-img" />
           </a>
           {form === "register" ? (
             <Register />

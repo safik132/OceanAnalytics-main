@@ -68,7 +68,6 @@ const Sidebar = ({ children }) => {
         style={{
           width: isOpen ? "200px" : "50px",
           zIndex: isOpen ? 1000 : 0,
-          marginBottom: "700px",
         }}
         className="sidebar"
       >
@@ -82,7 +81,7 @@ const Sidebar = ({ children }) => {
             alt="Aceslogo"
           />
           <div
-            style={{ marginLeft: isOpen ? "50px" : "0px", background: "black" }}
+            style={{ marginLeft: isOpen ? "50px" : "0px", cursor: "pointer" }}
             className="bars"
           >
             <FaBars onClick={toggle} />
