@@ -41,7 +41,7 @@ const IFelse = (props) => {
     switch (operator) {
       case ">":
         for (var i = 0; i < plotValue.length; i++) {
-          if (plotValue[i] > value) {
+          if (parseInt(plotValue[i], 10) > parseInt(value, 10)) {
             newFieldArray.push(ifText);
           } else {
             newFieldArray.push(elseText);
@@ -50,7 +50,7 @@ const IFelse = (props) => {
         break;
       case "<":
         for (var i = 0; i < plotValue.length; i++) {
-          if (plotValue[i] < value) {
+          if (parseInt(plotValue[i], 10) > parseInt(value, 10)) {
             newFieldArray.push(ifText);
           } else {
             newFieldArray.push(elseText);
@@ -59,7 +59,7 @@ const IFelse = (props) => {
         break;
       case "=":
         for (var i = 0; i < plotValue.length; i++) {
-          if ((plotValue[i] = value)) {
+          if (parseInt(plotValue[i], 10) > parseInt(value, 10)) {
             newFieldArray.push(ifText);
           } else {
             newFieldArray.push(elseText);
@@ -68,7 +68,7 @@ const IFelse = (props) => {
         break;
       case ">=":
         for (var i = 0; i < plotValue.length; i++) {
-          if (plotValue[i] >= value) {
+          if (parseInt(plotValue[i], 10) > parseInt(value, 10)) {
             newFieldArray.push(ifText);
           } else {
             newFieldArray.push(elseText);
@@ -77,7 +77,7 @@ const IFelse = (props) => {
         break;
       case "<=":
         for (var i = 0; i < plotValue.length; i++) {
-          if (plotValue[i] <= value) {
+          if (parseInt(plotValue[i], 10) > parseInt(value, 10)) {
             newFieldArray.push(ifText);
           } else {
             newFieldArray.push(elseText);
@@ -108,6 +108,7 @@ const IFelse = (props) => {
     setSheets(tempSheets);
     setIsOpen(false);
   };
+
   return (
     <>
       <input

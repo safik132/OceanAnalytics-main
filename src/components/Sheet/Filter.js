@@ -19,13 +19,11 @@ const customStyles = {
 
 function Filter() {
   const {
+    t,
     selectedSheet,
     setFilterValue,
     setFilterOperator,
     setFilterType,
-    filterValue,
-    filterOperator,
-    filterType,
     modalIsOpenFilter,
     setIsOpenFilter,
     selectValue,
@@ -54,6 +52,7 @@ function Filter() {
     setIsOpenFilter(false);
   }
   function filterOperators(e) {
+    e.preventDefault();
     setFilterOperator(e.target.value);
     if (e.target.value === "select") {
       setFilterOperator(null);
@@ -62,12 +61,21 @@ function Filter() {
     }
   }
   const filterCheck = (e) => {
+    // if (e.which == 13) {
+    //   e.preventDefault();
+    //   //do something
+    // }
+    // e.preventDefault();
     setFilterValue(e.target.value);
+    // return false;
+  };
+  const handleApply = (e) => {
+    setIsOpenFilter(false);
   };
   return (
     <div>
       <select onClick={openModal} className="all-component-btn">
-        <option value="filter">Filters</option>
+        <option value="filter">{t("Filters")}</option>
       </select>
       <Scrollbars>
         <Modal
@@ -76,32 +84,50 @@ function Filter() {
           onRequestClose={closeModal}
           style={customStyles}
         >
-          <h2 className="title">Filter Data</h2>
-          <button onClick={closeModal}>X</button>
-          <form>
-            <label>Target:{selectedSheet?.row?.key}</label>
-            <br></br>
-            <label>Operator:</label>
-            <select onClick={filterOperators} id="filter">
-              <option value="">select</option>
-              <option value="select">Null</option>
-              <option value="=">=</option>
-              <option value="<">{"<"}</option>
-              <option value="<=">{"<="}</option>
-              <option value=">">{">="}</option>
-              <option value=">">{">"}</option>
-            </select>
-            <br></br>
-            <label onClick={filterCheck}>
-              Value:
-              <input
-                type="text"
-                placeholder="enter value"
-                onChange={filterCheck}
-              />
-              <select>{selectValue}ss</select>
-            </label>
-          </form>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <h2 className="title">{t("Filter Data")}</h2>
+            <button onClick={closeModal} style={{ cursor: "pointer" }}>
+              X
+            </button>
+          </div>
+          <hr></hr>
+
+          {/* <form> */}
+          <label>
+            {t("Target")}:{selectedSheet?.row?.key}
+          </label>
+          <br></br>
+          <label>{t("Operator")}:</label>
+          <select onClick={filterOperators} id="filter">
+            <option value="">select</option>
+            <option value="select">Null</option>
+            <option value="=">=</option>
+            <option value="<">{"<"}</option>
+            <option value="<=">{"<="}</option>
+            <option value=">=">{">="}</option>
+            <option value=">">{">"}</option>
+          </select>
+          <br></br>
+          <label onClick={(e) => setFilterValue(e.target.value)}>
+            {t("Value")}:
+            <input
+              type="text"
+              placeholder="enter value"
+              onChange={(e) => setFilterValue(e.target.value)}
+            />
+            <select>{selectValue}ss</select>
+          </label>
+          <br></br>
+          <button className="modalApplyBtn" onClick={handleApply}>
+            Apply
+          </button>
+          {/* </form> */}
         </Modal>
       </Scrollbars>
     </div>

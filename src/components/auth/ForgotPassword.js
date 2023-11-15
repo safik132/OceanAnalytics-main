@@ -25,7 +25,6 @@ export default function ForgotPassword() {
       const ch = Math.floor(Math.random() * 10 + 1);
       randomOTP += ch;
     }
-    console.log(randomOTP);
     setOtp(randomOTP);
     const Dataemail = {
       email: email,
@@ -86,7 +85,6 @@ export default function ForgotPassword() {
           updatePwd
         )
         .then((res) => {
-          console.log(res.data);
           alert("Password changed succesfully");
           navigate("/");
           setForm("");

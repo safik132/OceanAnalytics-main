@@ -31,6 +31,7 @@ const ImportExcel = (props) => {
 
   let { nullCount, setNullCount } = useContext(GlobalContext);
   const {
+    t,
     setColumns,
     sheets,
     setSheets,
@@ -300,7 +301,7 @@ const ImportExcel = (props) => {
             accept="xlsx,xls,csv"
             onChange={(e) => handleUploadFile(e)}
           />
-          Import Data
+          {t("Import Data")}
         </label>
 
         <div

@@ -60,14 +60,10 @@ const Menu = ({ x, y, showMenu }) => {
   // }, [selectedSheet]);
   const handleChangingName = (e) => {
     setUpdateName(e.target.value);
-    console.log(updateName);
-    console.log(pathlocation);
     if (pathlocation === "Sheet") {
-      console.log("DDDDDDDDDDDDDDDDD");
       selectedSheet.name = updateName;
     }
     if (pathlocation === "dashboard") {
-      console.log("dashbaord");
       selectedDashboard.name = updateName;
     }
     if (pathlocation === "story") {

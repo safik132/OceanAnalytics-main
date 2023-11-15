@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../../images/logo.png";
 import Home from "../../images/Home.png";
 import Sheet from "../../images/Spreadsheet.png";
@@ -16,48 +16,50 @@ import {
   FaBars,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { GlobalContext } from "../../GlobalProvider";
 
 const Sidebar = ({ children }) => {
+  const { t } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
       path: "/",
-      name: "Home",
+      name: `${t("Home")}`,
       icon: <img src={Home} className={"sidebar-icon"} />,
       // <FaHome className={"sidebar-icon"}/>
     },
     {
       path: "/Sheet/sheet",
-      name: "Sheet",
+      name: `${t("Sheet")}`,
       icon: <img src={Sheet} className={"sidebar-icon"} />,
       // icon:<FontAwesomeIcon icon={faTable} className={"sidebar-icon"} />
     },
 
     {
       path: "/Datasource",
-      name: "Data Source",
+      name: `${t("Data Source")}`,
       icon: <img src={Data} className={"sidebar-icon"} />,
       // icon:<FontAwesomeIcon icon={faListCheck} className={"sidebar-icon"}/>
     },
 
     {
       path: "/dashboard/dashboard",
-      name: "Dashboard",
+      name: `${t("Dashbaord")}`,
       icon: <img src={Dash} className={"sidebar-icon"} />,
       // icon:<FaTh  className={"sidebar-icon"}/>
     },
 
     {
       path: "/story/story",
-      name: "Story",
+      name: `${t("Story")}`,
       icon: <img src={sty} className={"sidebar-icon"} />,
       // icon:<FontAwesomeIcon icon={faBookOpen} className={"sidebar-icon"} />
     },
 
     {
       path: "/AnalyticsMain",
-      name: "Analytics",
+      name: `${t("Analytics")}`,
       icon: <img src={analytics} className={"sidebar-icon"} />,
       // icon:<FontAwesomeIcon icon={faChartLine} className={"sidebar-icon"}/>
     },

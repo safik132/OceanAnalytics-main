@@ -1,19 +1,36 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, {
+  useContext,
+  useRef,
+  useState,
+  useEffect,
+  createRef,
+} from "react";
 import Plot from "react-plotly.js";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalProvider";
 import Footer from "../Sheet/Footer";
 import Header from "../Headers/Header";
 import Filter from "../Sheet/Filter";
-import { Link, useLocation } from "react-router-dom";
-import Scrollbars from "react-custom-scrollbars-2";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import { useScreenshot } from "use-react-screenshot";
 import Sidebar from "../SideBar/Sidebar";
 import Menu from "../../Menu";
+import { saveAs } from "file-saver";
+import AddTextModal from "./AddTextModal";
+
 const Dashboard = () => {
   const dragItem = useRef();
   const [scopemap, setScopeMap] = useState();
+  const [height, setHeight] = useState(false);
+  // const [plotWidth, setPlotWidth] = useState(0);
+  // const [plotHeight, setPlotHeight] = useState(0);
+  // const [gridTemplateColumns, setGridTemplateColumns] = useState();
+
+  // const [dashboardText, setDashboardText] = useState(); // State to store dynamically created Plot components
+  // const [numDrops, setNumDrops] = useState(0);
 
   const {
+    t,
     sheets,
     dashboards,
     setDashboards,
@@ -24,22 +41,42 @@ const Dashboard = () => {
     filterValue,
     selectedDashboard,
     setSelectedDashboard,
-    pathlocation,
+    selectedSheet,
     setPathLocation,
+    plotWidth,
+    setPlotHeight,
+    setPlotWidth,
+    plotHeight,
+    gridTemplateColumns,
+    setGridTemplateColumns,
+    dashboardText,
+    setAddTextModal,
+    numDrops,
+    setNumDrops,
   } = useContext(GlobalContext);
+  const ref = createRef(null);
+  const [image, takeScreenshot] = useScreenshot();
 
   const dashboardParam = useParams().dashboard;
 
   const handleDrop = (index) => {
-    const dragSheet = dragItem.current;
-    const updatedDashboard = dashboards.find(
-      (dashboard) => dashboard.name === dashboardParam
-    );
-    updatedDashboard.graphs[index] = dragSheet;
-    const tempDashboards = dashboards.map((dashboard) =>
-      dashboard.name === dashboardParam ? updatedDashboard : dashboard
-    );
-    setDashboards(tempDashboards);
+    if (selectedDashboard.drops === 6) {
+      alert(`No more sheets can be added`);
+      return;
+    } else {
+      const dragSheet = dragItem.current;
+      const updatedDashboard = dashboards.find(
+        (dashboard) => dashboard.name === dashboardParam
+      );
+      // updatedDashboard.graphs[index] = dragSheet;
+      updatedDashboard.graph.push(dragSheet);
+      updatedDashboard.drops += 1;
+      const tempDashboards = dashboards.map((dashboard) =>
+        dashboard.name === dashboardParam ? updatedDashboard : dashboard
+      );
+      setDashboards(tempDashboards);
+      setNumDrops(updatedDashboard.drops);
+    }
   };
   function mobileView() {
     document.getElementById("myDIV").style.width = "470px";
@@ -60,7 +97,8 @@ const Dashboard = () => {
   }
   const handleDashboardView = (e) => {
     if (e.target.value === "dashboard") {
-      document.getElementById("myDIV").style.width = "1500px";
+      setHeight(false);
+      document.getElementById("myDIV").style.width = "100%"; //1500px
       document.getElementById("myDIV").style.display = "grid";
       document.getElementById("myDIV").style.gridTemplateColumns =
         "1fr 1fr 1fr";
@@ -77,11 +115,71 @@ const Dashboard = () => {
       document.getElementById("myDIV").style.gridTemplateColumns = "1fr 1fr";
       document.getElementById("myDIV").style.overflow = "auto";
     }
+    if (e.target.value === "1") {
+      setHeight(true);
+      // document.getElementById("plotDiv").style.width = "100%";
+      // document.getElementById("plotDiv").style.height = "100%";
+      // document.getElementById("myDIV").style.width = "100%";
+      document.getElementById("myDIV").style.display = "grid";
+      document.getElementById("myDIV").style.gridTemplateColumns = "1fr";
+    }
+    if (e.target.value === "1:2") {
+      document.getElementById("plotDiv").style.width = "100%";
+      document.getElementById("plotDiv").style.height = "100%";
+      document.getElementById("myDIV").style.width = "100%";
+      document.getElementById("myDIV").style.display = "grid";
+      document.getElementById("myDIV").style.gridTemplateColumns = "1fr 1fr";
+      setHeight(true);
+    }
   };
-
   useEffect(() => {
     setSelectedDashboard(dashboards.find((s) => s.name === dashboardParam));
   }, [dashboardParam, selectedDashboard]);
+  useEffect(() => {
+    // Handle width changes when numDrops changes
+    if (selectedDashboard.drops === 1) {
+      setPlotWidth(1250);
+      setPlotHeight(570);
+      setGridTemplateColumns("1fr");
+    } else if (selectedDashboard.drops === 2) {
+      setPlotWidth("100%");
+      setPlotHeight("100%");
+      setGridTemplateColumns("1fr 1fr");
+    } else if (selectedDashboard.drops === 3) {
+      setPlotWidth(425);
+      setPlotHeight("100%");
+      setGridTemplateColumns("1fr 1fr 1fr");
+    } else if (selectedDashboard.drops === 4) {
+      setPlotWidth(450);
+      setPlotHeight(276);
+      setGridTemplateColumns("1fr 1fr 1fr");
+    } else if (selectedDashboard.drops > 6) {
+      alert("no more sheets can be added  ");
+      return;
+    } else {
+      setPlotWidth(450);
+      setPlotHeight(276);
+      setGridTemplateColumns("1fr 1fr 1fr");
+    }
+  }, [numDrops, selectedDashboard]);
+  const getImage = async () => {
+    const image = await takeScreenshot(ref.current);
+    return image;
+  };
+
+  const downloadImage = async () => {
+    try {
+      const image = await getImage();
+      if (image) {
+        saveAs(image, "dashboard.jpg");
+      } else {
+        alert("Image not available for download.");
+      }
+    } catch (error) {
+      alert("Error downloading image:", error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -97,13 +195,26 @@ const Dashboard = () => {
           <option value="mobile">Mobile</option>
           <option value="tablet">Tablet</option>
           <option value="dashboard">Dashboard</option>
+          <option value="1">1:1</option>
+          <option value="1:2">1:2</option>
         </select>
         <Filter />
+        {/* <button
+          onClick={() => setAddTextModal(true)}
+          className="all-component-btn"
+        >
+          Add Text
+        </button> */}
+
+        <button className="all-component-btn" onClick={downloadImage}>
+          Download
+        </button>
       </div>
+
       <div className="Dashboard" style={{ height: "80vh" }}>
         <div className="Sheets">
           <p style={{ fontSize: "18px", padding: "8px", textAlign: "center" }}>
-            Sheets
+            {t("Sheets")}
           </p>
           <hr></hr>
           <br></br>
@@ -127,34 +238,31 @@ const Dashboard = () => {
             </p>
           ))}
         </div>
+
         <div
-          className="AllSheets"
-          id="myDIV"
-          style={{
-            margin: "2px",
-            overflow: "hidden",
+          onDrop={(e) => {
+            e.preventDefault();
+            handleDrop();
           }}
+          ref={ref}
+          onDragOver={(e) => e.preventDefault()}
+          style={{
+            width: "100%",
+            margin: "4px",
+            display: "grid",
+            gridTemplateColumns: gridTemplateColumns,
+          }}
+          id="myDIV"
         >
-          {selectedDashboard?.graphs.map((sheet, index) => (
+          {selectedDashboard?.graph?.map((sheet, index) => (
             <div
-              droppable
-              onDrop={() => handleDrop(index)}
-              onDragOver={(e) => e.preventDefault()}
-              className="graphDrop"
+              key={index}
               style={{
                 border: "1px solid #ccc",
-                width: "424px",
-                height: "290px",
-                overflow: "hidden",
-                borderRadius: "8px",
                 margin: "2px",
               }}
             >
               <Plot
-                style={{
-                  width: "426px",
-                  height: "250px",
-                }}
                 data={[
                   sheet.graph === "pie"
                     ? {
@@ -354,8 +462,8 @@ const Dashboard = () => {
                   // autosize: true,
                   xaxis: { title: { text: sheet?.col?.key } },
                   yaxis: { title: { text: sheet?.row?.key } },
-                  // width: 440,
-                  height: 302,
+                  width: plotWidth,
+                  height: plotHeight,
                   fontSize: 2,
                   mapbox: { style: "open-street-map" },
                   title: sheet.name,
@@ -370,7 +478,9 @@ const Dashboard = () => {
               />
             </div>
           ))}
+          {/* <AddTextModal /> */}
         </div>
+
       </div>
       <Footer />
     </>

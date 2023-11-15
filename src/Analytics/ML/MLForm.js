@@ -51,7 +51,6 @@ const MLForm = () => {
       Tot_cost: formData.Tot_cost,
       Payment_Typology: formData.Payment_Typology,
     };
-    console.log(newData);
     // postFormData(newData);
     axios
       .post(
@@ -76,7 +75,6 @@ const MLForm = () => {
   function closeModal() {
     setIsOpen(false);
   }
-  console.log(term);
   return (
     <>
       <form className="ML_Form">

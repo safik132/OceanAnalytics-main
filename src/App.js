@@ -12,6 +12,7 @@ import { GlobalContext } from "./GlobalProvider";
 import Logins from "./components/auth/Logins";
 import Otp from "./components/auth/Otp";
 import PrivateRoutes from "./components/private-route/PrivateRoutes";
+
 const App = () => {
   const {} = useContext(GlobalContext);
 

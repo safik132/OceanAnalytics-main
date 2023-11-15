@@ -5,7 +5,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { FaTrash } from "react-icons/fa";
 
 const Describe = () => {
-  let { nullCount, setNullCount } = useContext(GlobalContext);
+  let { nullCount, setNullCount, t } = useContext(GlobalContext);
   const {
     selectedWB,
     selectedWBSheet,
@@ -44,12 +44,9 @@ const Describe = () => {
             fontSize: "18px",
           }}
         >
-          No of Rows:
-          {numberofRows}
-          || No of Columns:
-          {numberofColumns + 1}
-          || No of Null Values:
-          {nullCount}
+          {t("No of Rows")}:{numberofRows}
+          || {t("No of Columns")}:{numberofColumns + 1}
+          || {t("No of Null Values")}:{nullCount}
           <FaTrash
             style={{
               cursor: "pointer",

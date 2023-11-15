@@ -46,7 +46,7 @@ const Login = (props) => {
           "https://ocean-user-serverbackend.onrender.com/api/users/login",
           userData
         )
-        // .post("http://localhost:5001/api/users/login", userData)
+        // .post("http://localhost:5001/users/login", userData)
 
         .then((res) => {
           const { token } = res.data;

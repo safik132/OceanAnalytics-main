@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../GlobalProvider";
 import Plot from "react-plotly.js";
+import Story from "./Story";
 
 const PlotComponent = ({ sheet, story }) => {
   const [scopemap, setScopeMap] = useState();
-
   const {
     filterValue,
     filterOperator,
@@ -287,5 +287,7 @@ const PlotComponent = ({ sheet, story }) => {
       />
     </>
   );
+  return <Story />;
 };
+
 export default PlotComponent;

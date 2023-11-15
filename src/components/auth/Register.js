@@ -50,7 +50,6 @@ const Register = (userData) => {
       const ch = Math.floor(Math.random() * 10 + 1);
       randOtp += ch;
     }
-    console.log(randOtp);
     setRegisterOTP(randOtp);
     axios
       // .post("http://localhost:5001/api/users/checkemail", user)

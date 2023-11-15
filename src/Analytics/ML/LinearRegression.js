@@ -10,7 +10,7 @@ const LinearRegression = () => {
   const [cop1, setCop1] = useState([]);
   const [predictValue, setPredictValue] = useState([]);
   const [rege, setRege] = useState([]);
-  const { columns, dataFormat } = useContext(GlobalContext);
+  const { columns, dataFormat, t } = useContext(GlobalContext);
   function handlePrediction() {
     const regression = new SimpleLinearRegression(xArr, yArr);
     const sfa = Number(predictValue);
@@ -55,7 +55,7 @@ const LinearRegression = () => {
         </h1> */}
         <div className="variables">
           <p className="analysis">
-            Independent Variable
+            {t("Independent Variable")}
             <select className="data-variable" onClick={handleSelectedValue}>
               {columns.map((x) => {
                 return <option value={x}>{x}</option>;
@@ -63,7 +63,7 @@ const LinearRegression = () => {
             </select>
           </p>
           <p className="analysis">
-            Dependent Variable
+            {t("Dependent Variable")}
             <select className="data-variable" onClick={handleSelectedValue1}>
               {columns.map((x) => {
                 return <option value={x}>{x}</option>;
@@ -71,7 +71,7 @@ const LinearRegression = () => {
             </select>
           </p>
           <p className="analysis">
-            Prediction Parameter
+            {t("Prediction Parameter")}
             <input
               type="number"
               onChange={handlePredict}
@@ -79,7 +79,7 @@ const LinearRegression = () => {
             />
           </p>
           <button onClick={handlePrediction} className="analysisBtn">
-            Predict
+            {t("Predict")}
           </button>
 
           {rege}

@@ -6,7 +6,7 @@ import MultipleRegression from "./MultipleRegression";
 import MLForm from "./MLForm";
 
 const MLModel = () => {
-  const { dataFormat } = useContext(GlobalContext);
+  const { t } = useContext(GlobalContext);
   const [display, setDisplay] = useState();
 
   return (
@@ -18,7 +18,7 @@ const MLModel = () => {
             onClick={(e) => setDisplay(e.target.value)}
             value="describe_data"
           >
-            Regression
+            {t("Regression")}
           </button>
           {/*<button
           className="display_btn"
@@ -39,7 +39,7 @@ const MLModel = () => {
             value="ml_form"
             onClick={(e) => setDisplay(e.target.value)}
           >
-            Classification
+            {t("Classification")}
           </button>
         </div>
         {display === "describe_data" ? (

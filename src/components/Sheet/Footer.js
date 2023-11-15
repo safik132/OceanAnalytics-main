@@ -17,6 +17,7 @@ const Footer = () => {
   const storyParam = useParams().story;
 
   const {
+    t,
     sheets,
     setSheets,
     dashboards,
@@ -35,6 +36,8 @@ const Footer = () => {
     selectedDashboard,
     selectedStory,
     setSelectedSheet,
+    setSelectedStory,
+    setSelectedSheetContent,
   } = useContext(GlobalContext);
   const [contextMenuVisible, setContextMenuVisible] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({
@@ -52,6 +55,9 @@ const Footer = () => {
     const newDashboard = {
       name: `dashboard${dashboards.length}`,
       graphs: [0, 1, 2, 3, 4, 5],
+      graph: [],
+      drops: 0,
+      text: [],
     };
     setDashboards((prev) => [...prev, newDashboard]);
   };
@@ -149,7 +155,7 @@ const Footer = () => {
         <button className="footer-button">
           <img src={Sheet} className="icon-footer" />
           <Link to="/Datasource" className="icon-names">
-            Data Source
+            {t("Data Source")}
           </Link>
         </button>
 
@@ -161,7 +167,7 @@ const Footer = () => {
               contextmenu="mymenu"
             >
               <img src={Data} className="icon-footer" />
-              {sheet.name}
+              {t(`${sheet.name}`)}
             </Link>
           </button>
         ))}
@@ -176,7 +182,7 @@ const Footer = () => {
               contextmenu="mymenu"
             >
               <img src={Dash} className="icon-footer" />
-              {dashboard.name}
+              {t(`${dashboard.name}`)}
             </Link>
           </button>
         ))}
@@ -190,10 +196,11 @@ const Footer = () => {
             className="footer-button"
             onContextMenu={updateSheetname}
             contextmenu="mymenu"
+            onClick={() => setSelectedSheetContent(null)}
           >
             <Link to={`/story/${story.name}`} id="disableFooterStory">
               <img src={sty} className="icon-footer" />
-              {story.name}
+              {t(`${story.name}`)}
             </Link>
           </button>
         ))}
@@ -203,7 +210,7 @@ const Footer = () => {
         <button disabled={disableComponenet} className="footer-button">
           <Link to={"/AnalyticsMain"} id="disableFooterAnalytics">
             <img src={analytics} className="icon-footer" />
-            Analytics
+            {t("Analytics")}
           </Link>
         </button>
       </div>

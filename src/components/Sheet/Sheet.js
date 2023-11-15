@@ -21,6 +21,8 @@ import Crosstable from "./Crosstable";
 import { saveAs } from "file-saver";
 import Bufferingwindow from "./Bufferingwindow";
 import Sidebar from "../SideBar/Sidebar";
+import { useTranslation } from "react-i18next";
+
 const Sheet = () => {
   const [sheetParams, setSheetParam] = useState();
   const [scopemap, setScopeMap] = useState();
@@ -29,6 +31,8 @@ const Sheet = () => {
   // const [lat, setLat] = useState();
   const [sortedData, setSortedData] = useState({ x: [], y: [] });
   const [tableData, setTableData] = useState(null);
+  const { t, i18n } = useTranslation();
+  const [divs, setDivs] = useState([]);
 
   const {
     loading,
@@ -89,6 +93,18 @@ const Sheet = () => {
   };
 
   const handleDrop = (event) => {
+    const newDiv = (
+      <div
+        style={{
+          width: "100px",
+          height: "100px",
+          backgroundColor: "lightblue",
+        }}
+      ></div>
+    );
+
+    // Update the state to include the new div
+    setDivs([...divs, newDiv]);
     const dragValue = dragItem.current;
     const field = event.currentTarget.id;
     const plotValue = processCsv(selectedWB[selectedWBSheet]).map(
@@ -278,6 +294,7 @@ const Sheet = () => {
 
     saveAs(blob, "File.owbx");
   };
+
   return (
     <>
       <Header />
@@ -286,11 +303,7 @@ const Sheet = () => {
       {/* <AlanTalk processCsv={processCsv} selectGraph={selectGraph} /> */}
 
       <div className="row-column-button">
-       
-        <div
-          className="row-column
-        "
-        >
+        <div className="row-column">
           <div
             droppable
             className="dropzone"
@@ -298,13 +311,22 @@ const Sheet = () => {
             onDragOver={(e) => e.preventDefault()}
             id="row"
           >
-            Row : {selectedSheet?.row?.key}
+            {t("Row")} : {selectedSheet?.row?.key}
             <FaTrash
               onClick={deleteValues}
               id="row"
               style={{ cursor: "pointer" }}
             />
           </div>
+          {/* <div className={i18n.language === "ar" ? "rtl" : "ltr"}>
+            <button
+              onClick={() =>
+                i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+              }
+            >
+              {t("changeLanguage")}
+            </button>
+          </div> */}
           <div
             droppable
             className="dropzone"
@@ -312,7 +334,7 @@ const Sheet = () => {
             onDragOver={(e) => e.preventDefault()}
             id="col"
           >
-            Column: {selectedSheet?.col?.key}
+            {t("Column")}: {selectedSheet?.col?.key}
             <FaTrash
               onClick={deleteValues}
               id="col"
@@ -380,6 +402,7 @@ const Sheet = () => {
             </div>
           </Scrollbars>
         </div>
+
         <div className="graph">
           <div className="all3Components">
             <Filter />
@@ -389,44 +412,44 @@ const Sheet = () => {
               onChange={handleSorting}
               className="all-component-btn"
             >
-              <option value="null">Sort</option>
-              <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>
+              <option value="null">{t("Sort")}</option>
+              <option value="ascending">{t("Ascending")}</option>
+              <option value="descending">{t("Descending")}</option>
             </select>
             <select
               id="scope"
               onChange={(e) => setScopeMap(e.target.value)}
               className="all-component-btn"
             >
-              <option value="null">Scope/Geo Map</option>
-              <option value="usa">USA</option>
-              <option value="africa">Africa</option>
-              <option value="north america">North America</option>
-              <option value="south america">South America</option>
-              <option value="asia">Asia</option>
-              <option value="europe">Europe</option>
+              <option value="null">{t("Scope/Geo Map")}</option>
+              <option value="usa">{t("USA")}</option>
+              <option value="africa">{t("Africa")}</option>
+              <option value="north america">{t("North America")}</option>
+              <option value="south america">{t("South America")}</option>
+              <option value="asia">{t("Asia")}</option>
+              <option value="europe">{t("Europe")}</option>
             </select>
             <Granularity drop={handleDrop} deleteValues={deleteValues} />
           </div>
           {/* extra row values here*/}
 
           <select className="selectGraph" onChange={selectGraph} id="graph">
-            <option value="">Graph</option>
-            <option value="line">Line-Graph</option>
-            <option value="bar">Bar Chart</option>
-            <option value="pie">Pie-Chart</option>
-            <option value="donut">Donut Chart</option>
-            <option value="box">Box-Chart</option>
-            <option value="scatter">Scatter chart</option>
-            <option value="funnel">funnel</option>
-            <option value="scattermapbox">Map</option>
-            <option value="scattergeo">Geo Map</option>
-            <option value="table">Table</option>
-            <option value="Crosstab">Cross tab</option>
-            <option value="treemap">Tree</option>
+            <option value="">{t("Graph")}</option>
+            <option value="line">{t("Line-Graph")}</option>
+            <option value="bar">{t("Bar Chart")}</option>
+            <option value="pie">{t("Pie-Chart")}</option>
+            <option value="donut">{t("Donut Chart")}</option>
+            <option value="box">{t("Box-Chart")}</option>
+            <option value="scatter">{t("Scatter Chart")}</option>
+            <option value="funnel">{t("funnel")}</option>
+            <option value="scattermapbox">{t("Map")}</option>
+            <option value="scattergeo">{t("Geo Map")}</option>
+            <option value="table">{t("Table")}</option>
+            <option value="Crosstab">{t("Cross tab")}</option>
+            <option value="treemap">{t("Tree")}</option>
           </select>
           <input
-            value={sheetParam}
+            value={t(`${sheetParam}`)}
             className="sheetName"
             onChange={(e) => setSheetParam(e.target.value)}
           />

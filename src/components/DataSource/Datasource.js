@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Datasource = () => {
   const dragItem = useRef();
   const {
+    t, //as a transaltor
     selectedWBSheet,
     selectedWB,
     setSelectedWB,
@@ -209,7 +210,7 @@ const Datasource = () => {
       <Weatherapi />
       <div className="dataSource" style={{ height: "87vh" }}>
         <div className="dataSourcesheets">
-          <p>Sheets</p>
+          <p>{t("Sheets")}</p>
           <hr></hr>
           <ImportExcel />
           <ToastContainer />
@@ -276,7 +277,7 @@ const Datasource = () => {
               src="./images/union.png"
               style={{ width: "30px", height: "30px" }}
             />
-            New Union
+            {t("Union")}
           </button>
           <button
             style={{
@@ -295,7 +296,7 @@ const Datasource = () => {
               src="./images/union.png"
               style={{ width: "30px", height: "30px" }}
             />
-            InterSection
+            {t("InterSection")}
           </button>
         </div>
 

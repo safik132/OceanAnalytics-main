@@ -8,8 +8,11 @@ import Sequel from "../DataSource/Sequel";
 import Sconnect from "../Sheet/Sconnect";
 import Weatherapi from "../DataSource/Weatherapi";
 import "react-dropdown/style.css";
-
+import { useToggle } from "@uidotdev/usehooks";
+import ToggleLanguage from "../../ToggleLanguage";
 import { GlobalContext } from "../../GlobalProvider";
+import { useTranslation } from "react-i18next";
+
 const Header = () => {
   const {
     storys,
@@ -24,6 +27,8 @@ const Header = () => {
     setSequelQuery,
     setModalforWeather,
     loginUsername,
+    t,
+    i18n,
   } = useContext(GlobalContext);
   let navigate = useNavigate();
   const sheetParam = useParams().sheet;
@@ -33,6 +38,8 @@ const Header = () => {
   const [isFileDropdownOpen, setIsFileDropdownOpen] = useState(false);
   const [isHelpDropdownOpen, setIsHelpDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  // const { t, i18n } = useTranslation();
+  const [on, toggle] = useToggle(false);
 
   const toggleFileDropdown = () => {
     setIsFileDropdownOpen(!isFileDropdownOpen);
@@ -88,6 +95,14 @@ const Header = () => {
       saveAs(blob, "File.owbx");
     }
   };
+  const handleToggle = () => {
+    if (!on) {
+      i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+    } else {
+      i18n.changeLanguage(i18n.language === "en" ? "en" : "en");
+    }
+    // setToggle(!toggle);
+  };
   return (
     <>
       <Sconnect />
@@ -96,10 +111,10 @@ const Header = () => {
         <nav className="navmenu">
           <ul className="header__list">
             <li className="header__list" onClick={toggleFileDropdown}>
-              File
+              {t("File")}
               <ul className={`dropdown ${isFileDropdownOpen ? "show" : ""}`}>
-                <li onClick={() => handleMenuClick("Option 1")}>Open</li>
-                <li onClick={() => handleMenuClick("Save")}>Save</li>
+                <li onClick={() => handleMenuClick("Option 1")}>{t("Open")}</li>
+                <li onClick={() => handleMenuClick("Save")}>{t("Save")}</li>
                 <li onClick={() => handleMenuClick("connectsql")}>
                   Connect SQL
                 </li>
@@ -112,21 +127,21 @@ const Header = () => {
               </ul>
             </li>
             <li className="header__list" onClick={toggleHelpDropdown}>
-              Help
+              {t("Help")}
               <ul className={`dropdown ${isHelpDropdownOpen ? "show" : ""}`}>
                 <li onClick={() => handleMenuClick("FAQ")}>FAQ</li>
                 <li onClick={() => handleMenuClick("Contact Us")}>
-                  Contact Us
+                  {t("Contact Us")}
                 </li>
                 {/* Add more dropdown options */}
               </ul>
             </li>
-            <li> Data</li>
-            <li> Server</li>
+            <li> {t("Data")}</li>
+            <li> {t("Server")}</li>
           </ul>
         </nav>
         <div>
-          <h2 className="toolname">Ocean-Data Analytics Tool</h2>
+          <h2 className="toolname">{t("Terraview Data Analytics Tool")}</h2>
         </div>
         <div className="user-section text-end">
           <Link
@@ -172,6 +187,16 @@ const Header = () => {
             </li>
           </ul>
         </div>
+        {/* <div className={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <button
+            onClick={() =>
+              i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+            }
+          >
+            {t("changeLanguage")}
+          </button>
+        </div> */}
+        {/* <ToggleLanguage toggle={toggle} on={on} handleToggle={handleToggle} />  */}
       </div>
     </>
   );

@@ -18,6 +18,7 @@ import Sliders from "../Conditions/Sliders";
 
 const Condition = () => {
   const {
+    t,
     setIsOpe,
     modalIsOpen,
     setIsOpen,
@@ -61,7 +62,7 @@ const Condition = () => {
   return (
     <>
       <button onClick={openModal} className="all-component-btn">
-        Condition
+        {t("Condition")}
       </button>
 
       <Modal

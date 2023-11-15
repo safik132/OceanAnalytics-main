@@ -27,7 +27,6 @@ const Header = () => {
     if (e.target.value === "open") {
     }
     if (e.target.value === "Save") {
-      console.log("starting here");
       let obj = {};
       let allSheetsData = selectedWB;
       obj["sheetParam"] = sheetParam;

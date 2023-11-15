@@ -185,7 +185,6 @@ const AlanTalk = (props) => {
         navigate("/AnalyticsMain", { replace: "true" });
         break;
       default:
-        console.log("break");
         break;
     }
   };

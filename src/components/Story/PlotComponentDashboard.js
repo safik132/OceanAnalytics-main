@@ -11,7 +11,18 @@ const PlotComponentDashboard = ({ sheet, story }) => {
     filterType,
     sortType,
     sort,
+    plotWidth,
+    setPlotHeight,
+    setPlotWidth,
+    plotHeight,
+    gridTemplateColumns,
+    setGridTemplateColumns,
+    dashboardText,
+    setDashboardText,
+    numDrops,
+    setNumDrops,
   } = useContext(GlobalContext);
+  console.log(plotWidth, plotHeight);
   return (
     <>
       <Plot
@@ -211,8 +222,8 @@ const PlotComponentDashboard = ({ sheet, story }) => {
           // autosize: false,
           xaxis: { title: { text: sheet?.col?.key } },
           yaxis: { title: { text: sheet?.row?.key } },
-          width: 390,
-          height: 250,
+          width: plotWidth - 35, //plotWidth
+          height: plotHeight - 40, //plotHeight-30, //250
           fontSize: 2,
 
           mapbox: { style: "open-street-map" },

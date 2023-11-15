@@ -1,14 +1,25 @@
 import React, { createContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 const initialSheets = [
   { name: "sheet", workbooks: [], rows: [], cols: [], realData: [], Plot: [] },
 ];
-const initialDashboards = [{ name: "dashboard", graphs: [0, 1, 2, 3, 4, 5] }];
+const initialDashboards = [
+  {
+    name: "dashboard",
+    graphs: [0, 1, 2, 3, 4, 5],
+    graph: [],
+    drops: 0,
+    text: [],
+  },
+];
 const initialStorys = [{ name: "story", buttonContain: [] }];
 const initialContainer = [{ name: "container", containers: [0] }];
 
 export const GlobalContext = createContext({});
 
 export const GlobalProvider = ({ children }) => {
+  const { t, i18n } = useTranslation();
+
   const [sheets, setSheets] = useState(initialSheets);
   const [dashboards, setDashboards] = useState(initialDashboards);
   const [storys, setStorys] = useState(initialStorys);
@@ -29,7 +40,7 @@ export const GlobalProvider = ({ children }) => {
   const [container, setContainer] = useState(initialContainer);
   const [selectedStory, setSelectedStory] = useState();
   const [selectedSheet, setSelectedSheet] = useState();
-  const [selectedDashboard, setSelectedDashboard] = useState();
+  const [selectedDashboard, setSelectedDashboard] = useState([]);
 
   const [columns, setColumns] = useState([]);
   const [selectedWB, setSelectedWB] = useState();
@@ -92,10 +103,34 @@ export const GlobalProvider = ({ children }) => {
   const [openRenameModal, setRenameModal] = useState(false);
   const [pathlocation, setPathLocation] = useState();
   const [registerOTP, setRegisterOTP] = useState();
+  const [plotWidth, setPlotWidth] = useState(0);
+  const [plotHeight, setPlotHeight] = useState(0);
+  const [gridTemplateColumns, setGridTemplateColumns] = useState();
+
+  const [dashboardText, setDashboardText] = useState(); // State to store dynamically created Plot components
+  const [numDrops, setNumDrops] = useState(0);
+  const [selectedSheetContent, setSelectedSheetContent] = useState(null);
+  const [addTextmodal, setAddTextModal] = useState(false);
 
   return (
     <GlobalContext.Provider
       value={{
+        addTextmodal,
+        setAddTextModal,
+        selectedSheetContent,
+        setSelectedSheetContent,
+        plotWidth,
+        setPlotHeight,
+        setPlotWidth,
+        plotHeight,
+        gridTemplateColumns,
+        setGridTemplateColumns,
+        dashboardText,
+        setDashboardText,
+        numDrops,
+        setNumDrops,
+        t, /// here t is used as translastor
+        i18n,
         registerOTP,
         setRegisterOTP,
         pathlocation,

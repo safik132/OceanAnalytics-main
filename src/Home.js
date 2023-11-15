@@ -5,7 +5,7 @@ import "./App.css";
 // import Login from "./Login";
 import Login from "./components/auth/Logins";
 import Register from "./components/auth/Register";
-import Acealyze from "../src/images/Acealyze.png";
+import Acealyze from "../src/images/Terraview.png";
 import Otp from "./components/auth/Otp";
 import ForgotPassword from "./components/auth/ForgotPassword";
 const Home = () => {
