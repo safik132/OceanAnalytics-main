@@ -478,7 +478,7 @@ const Dashboard = () => {
               />
             </div>
           ))}
-          {/* <AddTextModal /> */}
+          <AddTextModal />
         </div>
 
       </div>

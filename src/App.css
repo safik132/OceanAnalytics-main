@@ -635,12 +635,28 @@ tr {
   border-radius: 10px;
   padding: 10px;
 }
+.modalStyles {
+  background-color: #ffffff;
+  width: 600px;
+  height: 320px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+}
 .modalInput {
   border: 1px solid black;
   border-radius: 8px;
   padding: 3px;
   margin: 3px;
 }
+
 .modalTitle {
   display: flex;
   justify-content: space-between;
@@ -1488,20 +1504,31 @@ select.selectGraph {
 }
 .draggable {
   width: auto;
-  height: 25px;
-  padding: 30px;
+  height: 50px;
+  padding: 10px;
   background-color: rgb(253, 250, 250);
   color: #030303;
-  text-align: center;
-  line-height: 8px;
+  /* line-height: 8px; */
   position: absolute;
   cursor: grab;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 8px;
+  resize: vertical; /* Enable vertical resizing if needed */
+  overflow-y: auto;
 }
 
 .draggable:active {
   cursor: grabbing;
+}
+
+.addtextmodalbtn {
+  margin: 3px;
+  border-radius: 2px;
+  align-items: center;
+  cursor: pointer;
+}
+.addtextmodalbtn:active {
+  background-color: #d4d7da;
 }
 @media screen and (min-width: 1000px) and (max-width: 1280px) {
   .storyDisplay {

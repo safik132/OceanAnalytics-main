@@ -1,46 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Modal from "react-modal";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../GlobalProvider";
-import { SketchPicker } from "react-color";
-
-const DraggableText = ({ text, initialPosition, index }) => {
-  const [isDragging, setDragging] = useState(false);
-  const [position, setPosition] = useState(initialPosition || { x: 0, y: 0 });
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const handleMouseDown = (e) => {
-    setDragging(true);
-    setOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    });
-  };
-
-  const handleMouseMove = (e) => {
-    if (isDragging) {
-      setPosition({
-        x: e.clientX - offset.x,
-        y: e.clientY - offset.y,
-      });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setDragging(false);
-  };
-
-  return (
-    <div
-      className="draggable"
-      style={{ left: position.x, top: position.y }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
-      {text}
-    </div>
-  );
-};
+import {
+  FaUnderline,
+  FaBold,
+  FaAlignCenter,
+  FaAlignLeft,
+  FaAlignRight,
+} from "react-icons/fa";
+import {
+  MdFormatItalic,
+  MdFormatColorFill,
+  MdBorderColor,
+} from "react-icons/md";
+import ReactGPicker from "react-gcolor-picker";
 
 const AddTextModal = () => {
   const [textValue, setTextValue] = useState("");
@@ -48,6 +22,24 @@ const AddTextModal = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [selectedOption, setSelectedOption] = useState("12"); // Default font size
+  const [fontList, setFontList] = useState([]);
+  const [selectedFont, setSelectedFont] = useState("Roboto");
+  const [width, setWidth] = useState(200); // Initial width
+  const [height, setHeight] = useState(200); // Initial width
+  const [fontBold, setFontBold] = useState(false);
+  const [fontItalic, setFontItalic] = useState(false);
+  const [underline, setTextUnderline] = useState(false);
+  const [alignText, setAlignText] = useState();
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [bgshowColorPicker, setShowBgColorPicker] = useState(false);
+
+  const [color, setColor] = useState();
+  const [bgColor, setBackgroundColor] = useState();
+
+  const [colorPickerPosition, setColorpickerposition] = useState({
+    x: 0,
+    y: 0,
+  });
   const dashboardParam = useParams().dashboard;
 
   const {
@@ -65,6 +57,13 @@ const AddTextModal = () => {
   const closeModal = () => {
     setAddTextModal(false);
     setTextValue("");
+    setAlignText();
+    setTextUnderline(false);
+    setSelectedOption("12");
+    setFontItalic(false);
+    setFontBold(false);
+    setShowColorPicker(false);
+    setColor("black");
   };
 
   const handleOk = () => {
@@ -76,9 +75,13 @@ const AddTextModal = () => {
       value: textValue,
       position: { x: position.x, y: position.y },
       fontSize: selectedOption + "px",
-      fontWeight: "bolder",
-      fontFamily: "sans-serif",
-      fontPosition: "left",
+      fontWeight: fontBold ? 900 : "normal",
+      fontFamily: `${selectedFont}`,
+      fontStyle: fontItalic ? "italic" : "normal",
+      textDecoration: underline ? "underline" : "",
+      textAlign: alignText,
+      color: color,
+      backgroundColor: bgColor,
     });
 
     const tempDashboards = dashboards.map((dashboard) =>
@@ -88,7 +91,29 @@ const AddTextModal = () => {
     setDashboards(tempDashboards);
     closeModal();
   };
+  useEffect(() => {
+    const fetchFonts = async () => {
+      console.log("first");
+      try {
+        const response = await fetch(
+          "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBboK4gA55svd-uTrqCAmiLulsSU2637Bs"
+        );
+        const data = await response.json();
+        if (data && data.items) {
+          setFontList(data.items.map((font) => font.family));
+        } else {
+          console.error("Invalid data structure:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching fonts:", error);
+      }
+    };
 
+    fetchFonts();
+  }, []);
+  const handleFontChange = (e) => {
+    setSelectedFont(e.target.value);
+  };
   const handleMouseDown = (e) => {
     setDragging(true);
     setOffset({
@@ -97,8 +122,9 @@ const AddTextModal = () => {
     });
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e, index) => {
     if (isDragging) {
+      // selectedDashboard?.text[index].push("position");
       setPosition({
         x: e.clientX - offset.x,
         y: e.clientY - offset.y,
@@ -106,7 +132,8 @@ const AddTextModal = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e, index) => {
+    console.log("position");
     setDragging(false);
   };
 
@@ -131,15 +158,75 @@ const AddTextModal = () => {
     "72",
   ]; // Add more options as needed
 
+  const hanldeInputChange = (e, index) => {
+    setAddTextModal(true);
+    console.log(e);
+    let x = selectedDashboard?.text[index].value;
+    console.log(x, selectedDashboard);
+  };
+  const hanldeDoubleClick = (e, index) => {
+    setAddTextModal(true);
+    let x = selectedDashboard?.text[index].value;
+    setTextValue(x);
+    console.log(x);
+  };
+  console.log(selectedDashboard);
+  const handleFontBold = () => {
+    setFontBold((prevFontBold) => !prevFontBold);
+  };
+  const handleTextAlign = (alignment) => {
+    setAlignText(alignment);
+  };
+  const onChange = (value) => {
+    setColor(value);
+    setShowColorPicker(!showColorPicker);
+  };
+  const handleColorPicker = (e) => {
+    setShowColorPicker(!showColorPicker);
+    setShowBgColorPicker(false);
+  };
+  const handleBgColorPicker = (e) => {
+    setShowBgColorPicker(!bgshowColorPicker);
+    setShowColorPicker(false);
+  };
+  const onBackgroundColorChange = (value) => {
+    setBackgroundColor(value);
+    setShowBgColorPicker(!bgshowColorPicker);
+  };
   return (
     <>
       {selectedDashboard &&
         selectedDashboard?.text?.map((text, index) => (
-          <DraggableText key={index} text={text.value} />
+          <div
+            key={index}
+            className="draggable"
+            style={{
+              fontSize: text.fontSize,
+              fontFamily: text.fontFamily,
+              left: position.x,
+              top: position.y,
+              fontWeight: text.fontWeight,
+              fontStyle: text.fontStyle,
+              textDecoration: text.textDecoration,
+              textAlign: text.textAlign,
+              color: text.color,
+              backgroundColor: text.backgroundColor,
+              width: "500px",
+              border: "1px solid black",
+            }}
+            contentEditable={true}
+            onDoubleClick={(e) => hanldeDoubleClick(e, index)}
+            onClick={handleMouseDown}
+            onMouseMove={(e) => handleMouseMove(e, index)}
+            onMouseUp={(e) => handleMouseUp(e, index)}
+          >
+            {text.value}
+          </div>
         ))}
+
       <Modal
         isOpen={addTextmodal}
-        className="modalStyle"
+        className="modalStyles"
         onRequestClose={closeModal}
         ariaHideApp={false}
       >
@@ -150,10 +237,16 @@ const AddTextModal = () => {
           </button>
         </div>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <select>
-            <option>Font</option>
-            <option>Sans Serif</option>
-            <option>Roboto</option>
+          <select
+            id="fontSelect"
+            value={selectedFont}
+            onChange={handleFontChange}
+          >
+            {fontList?.map((font) => (
+              <option key={font} value={font}>
+                {font}
+              </option>
+            ))}
           </select>
           <select value={selectedOption} onChange={handleOptionChange}>
             {fontSizeOptions.map((option) => (
@@ -164,58 +257,61 @@ const AddTextModal = () => {
           </select>
           <button
             style={{
-              fontWeight: "900",
-              margin: "5px",
-              borderRadius: "10px",
+              fontWeight: fontBold ? "bolder" : "normal",
             }}
+            className="addtextmodalbtn"
+            onClick={handleFontBold}
           >
-            B
+            <FaBold />
           </button>
           <button
             style={{
-              fontWeight: "900",
-              margin: "5px",
-              borderRadius: "10px",
+              fontStyle: fontItalic ? "italic" : "normal",
             }}
+            className="addtextmodalbtn"
+            onClick={() => setFontItalic((prevFontBold) => !prevFontBold)}
           >
-            I
+            <MdFormatItalic />
           </button>
           <div>
             <button
-              style={{
-                fontWeight: "900",
-                margin: "5px",
-                borderRadius: "10px",
-              }}
+              className="addtextmodalbtn"
+              style={{ textDecoration: underline ? "underline" : "" }}
+              onClick={() =>
+                setTextUnderline((prevTextUnderline) => !prevTextUnderline)
+              }
             >
-              U
+              <FaUnderline />
             </button>
             <button
-              style={{
-                fontWeight: "900",
-                margin: "5px",
-                borderRadius: "10px",
-              }}
+              className="addtextmodalbtn"
+              onClick={() => handleTextAlign("left")}
             >
-              L
+              <FaAlignLeft />
             </button>
             <button
-              style={{
-                fontWeight: "900",
-                margin: "5px",
-                borderRadius: "10px",
-              }}
+              className="addtextmodalbtn"
+              onClick={() => handleTextAlign("center")}
             >
-              C
-            </button>{" "}
+              <FaAlignCenter />
+            </button>
             <button
-              style={{
-                fontWeight: "900",
-                margin: "5px",
-                borderRadius: "10px",
-              }}
+              className="addtextmodalbtn"
+              onClick={() => handleTextAlign("right")}
             >
-              R
+              <FaAlignRight />
+            </button>
+            <button
+              className="addtextmodalbtn"
+              onClick={(e) => handleColorPicker(e)}
+            >
+              <MdBorderColor />
+            </button>
+            <button
+              className="addtextmodalbtn"
+              onClick={(e) => handleBgColorPicker(e)}
+            >
+              <MdFormatColorFill />
             </button>
           </div>
         </div>
@@ -226,7 +322,13 @@ const AddTextModal = () => {
             width: "100%",
             height: "175px",
             verticalAlign: "top",
-            resize: "none",
+            fontFamily: `${selectedFont}`,
+            fontWeight: fontBold ? 900 : "normal",
+            fontStyle: fontItalic ? "italic" : "normal",
+            textDecoration: underline ? "underline" : "",
+            textAlign: alignText,
+            color: color,
+            backgroundColor: bgColor,
           }}
           value={textValue}
           onChange={(e) => setTextValue(e.target.value)}
@@ -239,6 +341,44 @@ const AddTextModal = () => {
             Cancel
           </button>
         </div>
+        {showColorPicker && (
+          <div
+            style={{
+              position: "absolute",
+              top: "28%",
+              left: "55%",
+            }}
+          >
+            <ReactGPicker value="red" onChange={onChange} />
+          </div>
+        )}
+        {bgshowColorPicker && (
+          <div
+            style={{
+              position: "absolute",
+              top: "28%",
+              left: "55%",
+            }}
+          >
+            <ReactGPicker value="red" onChange={onBackgroundColorChange} />
+
+            <p
+              style={{
+                width: "100%",
+                borderTop: "none",
+                borderRight: "1px solid black",
+                borderLeft: "1px solid black",
+                borderBottom: "1px solid black",
+                color: "white",
+                background: "black",
+                marginBottom: "-140px",
+                textAlign: "center",
+              }}
+            >
+              Background
+            </p>
+          </div>
+        )}
       </Modal>
     </>
   );

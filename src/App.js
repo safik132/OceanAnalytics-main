@@ -12,6 +12,7 @@ import { GlobalContext } from "./GlobalProvider";
 import Logins from "./components/auth/Logins";
 import Otp from "./components/auth/Otp";
 import PrivateRoutes from "./components/private-route/PrivateRoutes";
+import Test from "./Test";
 
 const App = () => {
   const {} = useContext(GlobalContext);
@@ -22,6 +23,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="Otp" element={<Otp />} />
+          {/* <Route path="test" element={<Test />} /> */}
 
           <Route element={<PrivateRoutes />}>
             <Route exact path="/Sheet/:sheet" element={<Sheet />} />
