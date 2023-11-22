@@ -3,6 +3,7 @@ import { GlobalContext } from "../../GlobalProvider";
 import { Link, withRouter, useNavigate } from "react-router-dom";
 import axios from "axios";
 import emailjs from "@emailjs/browser";
+import { BASE_URL_NODE } from "../../apiconfig";
 /* to register user */
 const Register = (userData) => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const Register = (userData) => {
     axios
       // .post("http://localhost:5001/api/users/checkemail", user)
       .post(
-        "https://ocean-user-serverbackend.onrender.com/api/users/checkemail",
+        `${BASE_URL_NODE}/api/users/checkemail`,
         user
       )
       .then((res) => {

@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { GlobalContext } from "../../GlobalProvider";
 import axios from "axios";
+import { BASE_URL_NODE } from "../../apiconfig";
 const Sequel = () => {
   const {
     queryW,
@@ -24,7 +25,7 @@ const Sequel = () => {
     axios
       .post(
         // "http://localhost:5001/api/users/queryGeneration",
-        "https://ocean-user-serverbackend.onrender.com/api/users/Generation",
+        `${BASE_URL_NODE}/api/users/Generation`,
         query
       )
       .then((res) => {})

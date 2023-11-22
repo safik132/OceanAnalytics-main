@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { GlobalContext } from "../../GlobalProvider";
 import axios from "axios";
+import { BASE_URL_NODE } from "../../apiconfig";
 const Sconnect = () => {
   const navigate = useNavigate();
   const {
@@ -37,7 +38,7 @@ const Sconnect = () => {
     axios
       .post(
         // "http://localhost:5001/api/users/schema",
-        "https://ocean-user-serverbackend.onrender.com/api/users/schema",
+        `${BASE_URL_NODE}/api/users/schema`,
         server
       )
       .then((res) => {

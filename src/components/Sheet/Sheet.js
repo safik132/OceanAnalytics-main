@@ -22,6 +22,7 @@ import { saveAs } from "file-saver";
 import Bufferingwindow from "./Bufferingwindow";
 import Sidebar from "../SideBar/Sidebar";
 import { useTranslation } from "react-i18next";
+import { BASE_URL_DJANGO } from "../../apiconfig";
 
 const Sheet = () => {
   const [sheetParams, setSheetParam] = useState();
@@ -180,7 +181,7 @@ const Sheet = () => {
   const fetchTableData = () => {
     if (selectedSheet?.graph === "Crosstab") {
       axios
-        .post("https://python-api-productionserver.onrender.com/api/table", {
+        .post(`${BASE_URL_DJANGO}/api/table`, {
           col: selectedSheet?.col?.key,
           row: selectedSheet?.row?.key,
           text: selectedSheet?.text?.key,
@@ -230,7 +231,7 @@ const Sheet = () => {
       setSortedData({ x: [], y: [] });
     } else {
       axios
-        .post("https://python-api-productionserver.onrender.com/api/sort", {
+        .post(`${BASE_URL_DJANGO}/api/sort`, {
           action: e.target.value,
           col: selectedSheet?.col?.key,
           row: selectedSheet?.row?.key,

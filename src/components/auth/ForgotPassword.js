@@ -3,6 +3,7 @@ import { GlobalContext } from "../../GlobalProvider";
 import emailjs from "@emailjs/browser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL_NODE } from "../../apiconfig";
 /*
 Forgot password is the component to change password for the existing user,
 this page is rendered from the login page option that is forgot password.
@@ -35,7 +36,7 @@ export default function ForgotPassword() {
     axios
       // .post("http://localhost:5001/api/users/forgotPassword", Dataemail)
       .post(
-        "https://ocean-user-serverbackend.onrender.com/api/users/forgotPassword",
+        `${BASE_URL_NODE}/api/users/forgotPassword`,
         Dataemail
       )
       .then((res) => {
@@ -81,7 +82,7 @@ export default function ForgotPassword() {
       axios
         // .post("http://localhost:5001/api/users/updatePassword", updatePwd)
         .post(
-          "https://ocean-user-serverbackend.onrender.com/api/users/updatePassword",
+          `${BASE_URL_NODE}/api/users/updatePassword`,
           updatePwd
         )
         .then((res) => {

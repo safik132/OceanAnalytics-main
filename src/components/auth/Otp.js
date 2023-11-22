@@ -3,6 +3,7 @@ import { GlobalContext } from "../../GlobalProvider";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 import axios from "axios";
 import Acealyze from "../../images/Acealyze.png";
+import { BASE_URL_NODE } from "../../apiconfig";
 
 /*
 This page is the otp verification page for user registration when the user enter details its gonna popup to this page 
@@ -25,7 +26,7 @@ const Otp = (props) => {
       axios
         // .post("http://localhost:5001/api/users/register", user)
         .post(
-          "https://ocean-user-serverbackend.onrender.com/api/users/register",
+          `${BASE_URL_NODE}/api/users/register`,
           user
         )
         .then((res) => {

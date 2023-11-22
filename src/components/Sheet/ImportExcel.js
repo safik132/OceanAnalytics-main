@@ -7,6 +7,7 @@ import "../../App.css";
 import { useParams } from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars-2";
 import axios from "axios";
+import { BASE_URL_DJANGO } from "../../apiconfig";
 
 function getDataRange(data) {
   const dataWithValues = pickBy(data, (value, key) => !!value.v);
@@ -185,7 +186,7 @@ const ImportExcel = (props) => {
 
     axios
       .post(
-        "https://python-api-productionserver.onrender.com/api/uploadfile",
+        `${BASE_URL_DJANGO}/api/uploadfile`,
         formData,
         {
           headers: {

@@ -13,6 +13,7 @@ import Sidebar from "../SideBar/Sidebar";
 import Weatherapi from "./Weatherapi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL_NODE } from "../../apiconfig";
 const Datasource = () => {
   const dragItem = useRef();
   const {
@@ -118,7 +119,7 @@ const Datasource = () => {
     axios
       .post(
         // "http://localhost:5001/api/users/database",
-        "https://ocean-user-serverbackend.onrender.com/api/users/database",
+        `${BASE_URL_NODE}/api/users/database`,
         databaseName
       )
       .then((res) => {
@@ -145,7 +146,7 @@ const Datasource = () => {
     axios
       .post(
         // "http://localhost:5001/api/users/databaseTable",
-        "https://ocean-user-serverbackend.onrender.com/api/users/databaseTable",
+        `${BASE_URL_NODE}/api/users/databaseTable`,
         dbandTable
       )
       .then((res) => {

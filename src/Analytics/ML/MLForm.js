@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { GlobalContext } from "../../GlobalProvider";
 import Modal from "react-modal";
 import axios from "axios";
+import { BASE_URL_DJANGO } from "../../apiconfig";
 const MLForm = () => {
   const {
     setIsOpe,
@@ -54,7 +55,7 @@ const MLForm = () => {
     // postFormData(newData);
     axios
       .post(
-        "https://python-api-productionserver.onrender.com/ml/data/",
+        `${BASE_URL_DJANGO}/ml/data/`,
         newData
       )
       // .post("http://localhost:8000/ml/data/", newData)

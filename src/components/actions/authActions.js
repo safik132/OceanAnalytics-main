@@ -1,12 +1,13 @@
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 import { setAuthenticated, SET_CURRENT_USER, USER_LOADING } from "./types";
+import { BASE_URL_NODE } from "../../apiconfig";
 
 export const registerUser = (userData, history) => {
   axios
     // .post("http://localhost:5001/api/users/register", userData)
     .post(
-      "https://ocean-user-serverbackend.onrender.com/api/users/register",
+      `${BASE_URL_NODE}/api/users/register`,
       userData
     )
     .then((res) => {

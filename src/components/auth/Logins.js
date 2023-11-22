@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../../GlobalProvider";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL_NODE } from "../../apiconfig";
 /*
 Login page rendered on the home page
 */
@@ -43,7 +44,7 @@ const Login = (props) => {
     } else {
       axios
         .post(
-          "https://ocean-user-serverbackend.onrender.com/api/users/login",
+          `${BASE_URL_NODE}/api/users/login`,
           userData
         )
         // .post("http://localhost:5001/users/login", userData)
