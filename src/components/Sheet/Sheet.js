@@ -181,7 +181,7 @@ const Sheet = () => {
   const fetchTableData = () => {
     if (selectedSheet?.graph === "Crosstab") {
       axios
-        .post(`${BASE_URL_DJANGO}/api/table`, {
+        .post(`${BASE_URL_DJANGO}/mlapi/table`, {
           col: selectedSheet?.col?.key,
           row: selectedSheet?.row?.key,
           text: selectedSheet?.text?.key,
@@ -231,7 +231,7 @@ const Sheet = () => {
       setSortedData({ x: [], y: [] });
     } else {
       axios
-        .post(`${BASE_URL_DJANGO}/api/sort`, {
+        .post(`${BASE_URL_DJANGO}/mlapi/sort`, {
           action: e.target.value,
           col: selectedSheet?.col?.key,
           row: selectedSheet?.row?.key,
