@@ -186,7 +186,7 @@ const ImportExcel = (props) => {
 
     axios
       .post(
-        `${BASE_URL_DJANGO}/api/uploadfile`,
+        `${BASE_URL_DJANGO}/mlapi/uploadfile`,
         formData,
         {
           headers: {
