@@ -96,7 +96,7 @@ const AddTextModal = () => {
       console.log("first");
       try {
         const response = await fetch(
-          "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBboK4gA55svd-uTrqCAmiLulsSU2637Bs"
+          "http://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBboK4gA55svd-uTrqCAmiLulsSU2637Bs"
         );
         const data = await response.json();
         if (data && data.items) {

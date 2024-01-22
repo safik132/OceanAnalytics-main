@@ -54,7 +54,7 @@ const Otp = (props) => {
     <>
       <div className="home-page">
         <div className="OtpLeftSide">
-          <a href="https://www.aces-co.com/" rel="noreferrer" target="_blank">
+          <a href="http://www.aces-co.com/" rel="noreferrer" target="_blank">
             <img className="logo" src={Acealyze} alt="logo-img" />
           </a>
         </div>

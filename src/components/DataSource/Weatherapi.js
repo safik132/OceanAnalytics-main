@@ -10,7 +10,7 @@ const Weatherapi = () => {
   });
   const api = {
     key: "5140ce738ad6e15903ea35381152d6b6",
-    base: "https://pro.openweathermap.org/data/2.5/",
+    base: "http://pro.openweathermap.org/data/2.5/",
   };
   const {
     serchwithCity,
@@ -35,7 +35,7 @@ const Weatherapi = () => {
   }
   const fetchData = () => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${latforWeather}&lon=${lonforWeather}&appid=${api.key}`
+      `http://api.openweathermap.org/data/2.5/forecast?lat=${latforWeather}&lon=${lonforWeather}&appid=${api.key}`
     )
       .then((res) => res.json())
       .then((result) => {
@@ -102,8 +102,8 @@ const Weatherapi = () => {
   };
   const fetchDataforSingleCity = () => {
     fetch(
-      // `https://api.openweathermap.org/data/2.5/forecast?lat=51.5085&lon=-0.1257&appid=a78e115673106c6bd2caf5be94523cd6`
-      `https://api.openweathermap.org/data/2.5/weather?q=${serchwithCity}&appid=${api.key}`
+      // `http://api.openweathermap.org/data/2.5/forecast?lat=51.5085&lon=-0.1257&appid=a78e115673106c6bd2caf5be94523cd6`
+      `http://api.openweathermap.org/data/2.5/weather?q=${serchwithCity}&appid=${api.key}`
     )
       .then((res) => res.json())
       .then((result) => {
